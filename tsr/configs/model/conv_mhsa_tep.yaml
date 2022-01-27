@@ -1,0 +1,9 @@
+model:
+  architecture_name: conv_mhsa
+  input_shape: [500, 52]
+  conv_filters: [128, 128, 512]
+  kernel: [7, 7, 7]
+  strides: [1, 2, 2]
+  num_heads: 8
+  d_model: 512
+  dff: 512

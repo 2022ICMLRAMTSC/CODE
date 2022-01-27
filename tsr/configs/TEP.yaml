@@ -1,0 +1,20 @@
+hyperparameters:
+  NFOLD: 5
+  truncate_last_timesteps: 4096
+  num_class: 21
+  batch_size: 32
+  training_epochs: 30
+  training_steps_per_epoch: 500
+  shuffle_buffer: 1024
+
+model:
+  sub_config_path: model/conv_mhsa_tep.yaml
+  
+augment:
+  random_shift:
+    backward: 32
+    forward: 32
+
+environment:
+  type: colab_tpu
+
