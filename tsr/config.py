@@ -61,6 +61,8 @@ class Config(UserDict):
 
         logger.debug(self.data)
 
+        self.as_attr_dict()
+
     def validate_yaml(self):
         """
         This method performs the assertions in the try block to validate the yaml file.
@@ -137,10 +139,6 @@ class Config(UserDict):
 
             except KeyError:
                 logger.debug("Sub Config Not Specified for %s config group" % k)
-
-    # def update(self, *args, **kwargs):
-    #     super().update(*args, **kwargs)
-    #     self.as_attr_dict()
 
 
 class AttrDict(dict):

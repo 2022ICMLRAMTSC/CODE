@@ -24,13 +24,13 @@ class TEP_DatasetManager(DatasetManager):
     dataframe_disk_name = "TEP_data.parquet"
 
     def __init__(self, config: Config):
-        '''
+        """
         By default, downloads the parquet version of the TEP dataset. You can manually process the RData files
         if you want using the get_tep_data_as_dataframe method.
 
         Args:
             config:
-        '''
+        """
 
         self.config = config
         self.dataframe, self.scaler = self.get_tep_data_as_dataframe()
@@ -88,7 +88,7 @@ class TEP_DatasetManager(DatasetManager):
     def get_tep_data_as_dataframe(cls, process_raw_rdata=False):
 
         if process_raw_rdata:
-            logger.warning('You need a lot of RAM to read the RDATA file. At least 32GB')
+            logger.warning("You need a lot of RAM to read the RDATA file. At least 32GB")
 
             output = "tep_dataset.zip"
             gdown.download(cls.url, output, quiet=False)
@@ -126,7 +126,7 @@ class TEP_DatasetManager(DatasetManager):
             df["id"] = df.faultNumber.apply(lambda x: int(x)) + df.simulationRun.apply(lambda x: int(x) * 100)
 
             scaler = preprocessing.MinMaxScaler()
-            scaler.fit(df.iloc[:, 3:55][df.split == "train"].sample(1000000, random_state = 0))
+            scaler.fit(df.iloc[:, 3:55][df.split == "train"].sample(1000000, random_state=0))
 
             logger.debug("Writing Data to Disk")
 
@@ -148,19 +148,19 @@ class TEP_DatasetManager(DatasetManager):
 
             logger.debug("Fitting Scaler")
             scaler = preprocessing.MinMaxScaler()
-            scaler.fit(df.iloc[:, 3:55][df.split == "train"].sample(1000000, random_state = 0))
+            scaler.fit(df.iloc[:, 3:55][df.split == "train"].sample(1000000, random_state=0))
 
         return df, scaler
 
     @classmethod
     def apply_scaler(cls, df, scaler):
-        logger.debug('Applying Scaler')
+        logger.debug("Applying Scaler")
 
         n = int(1e6)
         for i in tqdm(range(int(len(df) / n) + 1)):
-            df.iloc[i * n:(i + 1) * n, 3:55] = scaler.transform(df.iloc[i * n:(i + 1) * n, 3:55])
+            df.iloc[i * n : (i + 1) * n, 3:55] = scaler.transform(df.iloc[i * n : (i + 1) * n, 3:55])
 
-        logger.debug('Applied Scaler')
+        logger.debug("Applied Scaler")
 
         return df
 

@@ -1,10 +1,11 @@
 from tsr.methods.augmentation import Augmentation
+from tsr.methods.augmentation.common import check_proba
 import tensorflow as tf
 from typing import Union
 
 
 class RandomShifter(Augmentation):
-    def __init__(self, shift_backward_max: int, shift_forward_max: int, sequence_shape: Union[list, tuple]):
+    def __init__(self, shift_backward_max: int, shift_forward_max: int, sequence_shape: Union[list, tuple], do_prob=1.0):
         """
         Padded random shift of a sequence. A sequence is shifted forward or back by n timesteps by choosing n as a
         value between the forward max and backward max. If backward max is provided as a negative number, it will
@@ -20,6 +21,7 @@ class RandomShifter(Augmentation):
         self.shift_forward_max = shift_forward_max
         self.shift_backward_max = abs(shift_backward_max)
         self.sequence_shape = sequence_shape
+        self.do_prob = do_prob
 
     def call(self, example: dict) -> dict:
         input = example["input"]
@@ -28,8 +30,10 @@ class RandomShifter(Augmentation):
         return example
 
     def singular_call(self, input: tf.Tensor) -> tf.Tensor:
-        start = self.get_start_position()
-        input = self.shift(input, start)
+        if check_proba(self.do_prob):
+            start = self.get_start_position()
+            input = self.shift(input, start)
+
         return input
 
     def shift(self, input: tf.Tensor, start: tf.Tensor) -> tf.Tensor:

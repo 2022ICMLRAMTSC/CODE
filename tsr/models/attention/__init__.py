@@ -4,3 +4,4 @@ from tsr.models.attention.common import (
 )
 from tsr.models.attention.mhsa import MultiHeadAttention, EncoderLayer
 from tsr.models.attention.convmhsa import ConvMHSA
+from tsr.models.attention.positionalencoding import PositionalEncoding
